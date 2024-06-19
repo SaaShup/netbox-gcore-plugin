@@ -8,6 +8,7 @@ from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
 )
+from taggit.managers import TaggableManager
 from netbox.models import NetBoxModel
 
 
@@ -32,6 +33,10 @@ class ZoneAccount(NetBoxModel):
             MinLengthValidator(limit_value=1),
             MaxLengthValidator(limit_value=255),
         ],
+    )
+
+    tags = TaggableManager(
+        through="extras.TaggedItem", related_name="netbox_gcore_plugin_zoneaccount_set"
     )
 
     class Meta:
@@ -105,6 +110,9 @@ class DnsRecord(NetBoxModel):
         ],
     )
     proxied = models.BooleanField(default=False, null=False, blank=False)
+    tags = TaggableManager(
+        through="extras.TaggedItem", related_name="netbox_gcore_plugin_dnsrecord_set"
+    )
 
     class Meta:
         """DNS entry Meta Class"""

@@ -9,10 +9,10 @@ from .models import ZoneAccount, DnsRecord
 class DnsRecordFilterSet(NetBoxModelFilterSet):
     """DnsRecord filterset definition class"""
 
-    zone_name = ModelMultipleChoiceFilter(
-        field_name="zone_name",
+    zone_id = ModelMultipleChoiceFilter(
+        field_name="zone_id",
         queryset=ZoneAccount.objects.all(),
-        label="Account (ZONE_NAME)",
+        label="Account (ID)",
     )
 
     class Meta:
