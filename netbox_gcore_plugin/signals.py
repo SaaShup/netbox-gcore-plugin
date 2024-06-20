@@ -24,10 +24,10 @@ def init_zoneaccount(instance, **_kwargs):
             result = client.get_dns_records(page=page)
             DnsRecord.objects.bulk_create(result["records"])
 
-            if page == result["result_info"]["total_pages"]:
-                break
+            #if page == result["result_info"]["total"]:
+            #    break
 
-            page = page + 1
+            #page = page + 1
 
 
 @receiver(pre_save, sender=DnsRecord)

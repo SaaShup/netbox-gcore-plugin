@@ -17,25 +17,26 @@ class GcoreDnsClient:
     def get_dns_records(self, page=1, per_page=100):
         """Get DNS Record from Gcore"""
 
-        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}/dns_records"
+        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}"
         headers = {
             "Authorization": f"APIKey {self.zone_account.token}",
             "Content-Type": "application/json",
         }
 
         response = requests.get(
-            url, headers=headers, timeout=5, params={"page": page, "per_page": per_page}
+            url, headers=headers, timeout=5
         )
 
         response.raise_for_status()
 
         content = response.json()
 
-        result = {"result_info": content["result_info"]}
+       #result = {"result_info": content["rrsets_amount"]}
+        result = {}
 
         result["records"] = []
 
-        for record in content["result"]:
+        for record in content["records"]:
             if record["type"] in (DnsRecord.A, DnsRecord.CNAME):
                 result["records"].append(
                     DnsRecord(
@@ -45,7 +46,7 @@ class GcoreDnsClient:
                         type=record["type"],
                         content=record["short_answers"][0],
                         ttl=record["ttl"],
-                        proxied=false,
+                        proxied=False,
                     )
                 )
 
