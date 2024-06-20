@@ -14,7 +14,7 @@ class GcoreDnsClient:
         self.zone_account = zone_account
         self.base_url = base_url
 
-    def get_dns_records(self, page=1, per_page=100):
+    def get_dns_records(self):
         """Get DNS Record from Gcore"""
 
         url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}"
@@ -31,7 +31,6 @@ class GcoreDnsClient:
 
         content = response.json()
 
-       #result = {"result_info": content["rrsets_amount"]}
         result = {}
 
         result["records"] = []

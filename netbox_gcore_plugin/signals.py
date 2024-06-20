@@ -18,16 +18,8 @@ def init_zoneaccount(instance, **_kwargs):
             settings.PLUGINS_CONFIG["netbox_gcore_plugin"]["gcore_base_url"],
         )
 
-        page = 1
-
-        while True:
-            result = client.get_dns_records(page=page)
-            DnsRecord.objects.bulk_create(result["records"])
-
-            #if page == result["result_info"]["total"]:
-            #    break
-
-            #page = page + 1
+        result = client.get_dns_records()
+        DnsRecord.objects.bulk_create(result["records"])
 
 
 @receiver(pre_save, sender=DnsRecord)
