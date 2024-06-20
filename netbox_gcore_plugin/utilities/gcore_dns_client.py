@@ -54,7 +54,7 @@ class GcoreDnsClient:
     def create_dns_record(self, dns_record):
         """Add DNS Record to Gcore"""
 
-        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}/{self.dns_record.name}/{dns_record.type}"
+        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}/{dns_record.name}/{dns_record.type}"
         headers = {
             "Authorization": f"APIKey {self.zone_account.token}",
             "Content-Type": "application/json",
@@ -68,7 +68,8 @@ class GcoreDnsClient:
                 "resource_records": [{
                     "content": [dns_record.content]
                 }],
-                "ttl": dns_record.ttl,
+                #"ttl": dns_record.ttl,
+                "ttl": 0
             },
         )
 
@@ -83,7 +84,7 @@ class GcoreDnsClient:
     def delete_dnsrecord(self, dns_record):
         """Delete DNS Record to from"""
 
-        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_id}/{self.dns_record.name}/{dns_record.type}"
+        url = f"{self.base_url}/dns/v2/zones/{self.zone_account.zone_name}/{dns_record.name}/{dns_record.type}"
 
         headers = {
             "Authorization": f"APIKey {self.zone_account.token}",
