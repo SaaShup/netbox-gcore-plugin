@@ -1,9 +1,15 @@
 """API views definitions"""
 
 from netbox.api.viewsets import NetBoxModelViewSet
-from .serializers import ZoneAccountSerializer, DnsRecordSerializer
-from ..models import ZoneAccount, DnsRecord
+from .serializers import ZoneAccountSerializer, DnsRecordSerializer, ZoneZonesSerializer
+from ..models import ZoneAccount, DnsRecord, ZoneZones
 
+class ZoneZonesViewSet(NetBoxModelViewSet):
+    """ZoneZones view set class"""
+
+    queryset = ZoneZones.objects.all()
+    serializer_class = ZoneZonesSerializer
+    http_method_names = ["get", "post", "delete", "options"]
 
 class ZoneAccountViewSet(NetBoxModelViewSet):
     """ZoneAccount view set class"""

@@ -7,7 +7,24 @@ from utilities.forms.fields import (
     DynamicModelChoiceField,
 )
 from netbox.forms import NetBoxModelForm, NetBoxModelFilterSetForm
-from .models import ZoneAccount, DnsRecord
+from .models import ZoneAccount, DnsRecord, ZoneZones
+
+class ZoneZonesForm(NetBoxModelForm):
+    """ZoneZones form definition class"""
+
+    account = DynamicModelChoiceField(
+        label="Account", queryset=ZoneAccount.objects.all(), required=True
+    )
+
+    class Meta:
+        """ZoneZones form definition Meta class"""
+
+        model = ZoneZones
+        fields = (
+            "account",
+            "zone_name",
+            "tags",
+        )
 
 
 class ZoneAccountForm(NetBoxModelForm):
@@ -18,7 +35,6 @@ class ZoneAccountForm(NetBoxModelForm):
 
         model = ZoneAccount
         fields = (
-            "zone_name",
             "token",
             "tags",
         )
@@ -28,7 +44,7 @@ class DnsRecordForm(NetBoxModelForm):
     """DnsRecord form definition class"""
 
     zone = DynamicModelChoiceField(
-        label="Zone Account", queryset=ZoneAccount.objects.all(), required=True
+        label="Zone", queryset=ZoneZones.objects.all(), required=True
     )
 
     class Meta:
@@ -51,9 +67,9 @@ class DnsRecordFilterForm(NetBoxModelFilterSetForm):
     model = DnsRecord
 
     zone_name = DynamicModelMultipleChoiceField(
-        queryset=ZoneAccount.objects.all(),
+        queryset=ZoneZones.objects.all(),
         required=False,
-        label="Account",
+        label="Zones",
     )
     type = forms.ChoiceField(
         label="Type", choices=DnsRecord.TYPE_CHOICE, required=False

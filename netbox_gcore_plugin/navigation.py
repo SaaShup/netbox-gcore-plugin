@@ -14,6 +14,14 @@ zoneaccount_buttons = [
     )
 ]
 
+zonezones_buttons = [
+    PluginMenuButton(
+        link="plugins:netbox_gcore_plugin:zonezones_add",
+        title="Add",
+        icon_class="mdi mdi-plus-thick"
+    )
+]
+
 dnsrecord_buttons = [
     PluginMenuButton(
         link="plugins:netbox_gcore_plugin:dnsrecord_add",
@@ -33,6 +41,12 @@ account_item = [
 
 dns_item = [
     PluginMenuItem(
+        link="plugins:netbox_gcore_plugin:zonezones_list",
+        link_text="Zones",
+        buttons=zonezones_buttons,
+        permissions=["netbox_gcore_plugin.view_zonezones"],
+    ),
+    PluginMenuItem(
         link="plugins:netbox_gcore_plugin:dnsrecord_list",
         link_text="Records",
         buttons=dnsrecord_buttons,
@@ -42,6 +56,6 @@ dns_item = [
 
 menu = PluginMenu(
     label="Gcore",
-    groups=(("ACCOUNTS", account_item),("DNS ZONE", dns_item),),
+    groups=(("ACCOUNTS", account_item),("DNS", dns_item),),
     icon_class="mdi mdi-cloud",
 )
