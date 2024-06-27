@@ -22,7 +22,7 @@ class ZoneZonesView(generic.ObjectView):
 
     queryset = ZoneZones.objects.prefetch_related("records")
 
-    def get_extra_context(self, request, instance):
+    """def get_extra_context(self, request, instance):
         related_models = (
             (
                 DnsRecord.objects.filter(zone=instance),
@@ -32,7 +32,7 @@ class ZoneZonesView(generic.ObjectView):
 
         return {
             "related_models": related_models,
-        }
+        }"""
 
 
 class ZoneZonesAddView(generic.ObjectEditView):
@@ -58,9 +58,7 @@ class ZoneZonesDeleteView(generic.ObjectDeleteView):
 class ZoneAccountListView(generic.ObjectListView):
     """ZoneAccount list view definition"""
 
-    queryset = ZoneAccount.objects.annotate(
-        dnszones_count=count_related(ZoneZones, "zone_name")
-    )
+    queryset = ZoneAccount.objects.all()
     table = ZoneAccountTable
 
 
@@ -69,7 +67,7 @@ class ZoneAccountView(generic.ObjectView):
 
     queryset = ZoneAccount.objects.prefetch_related("zones")
 
-    def get_extra_context(self, request, instance):
+    """ def get_extra_context(self, request, instance):
         related_models = (
             (
                 ZoneZones.objects.filter(zone=instance),
@@ -79,7 +77,7 @@ class ZoneAccountView(generic.ObjectView):
 
         return {
             "related_models": related_models,
-        }
+        } """
 
 
 class ZoneAccountAddView(generic.ObjectEditView):

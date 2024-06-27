@@ -8,7 +8,7 @@ from .models import ZoneAccount, DnsRecord, ZoneZones
 class ZoneZonesFilterSet(NetBoxModelFilterSet):
     """ZoneZones filterset definition class"""
 
-    zone_id = ModelMultipleChoiceFilter(
+    account_id = ModelMultipleChoiceFilter(
         field_name="account_id",
         queryset=ZoneAccount.objects.all(),
         label="Account (ID)",
@@ -17,8 +17,8 @@ class ZoneZonesFilterSet(NetBoxModelFilterSet):
     class Meta:
         """DnsRecord filterset definition meta class"""
 
-        model = DnsRecord
-        fields = ("id", "type")
+        model = ZoneZones
+        fields = ("id",)
 
     def search(self, queryset, name, value):
         """override"""

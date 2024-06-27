@@ -33,11 +33,11 @@ class ZoneAccountTable(NetBoxTable):
     """ZoneAccount Table definition class"""
 
     token = tables.Column(linkify=True)
-    zonezones_count = columns.LinkedCountColumn(
+    """zonezones_count = columns.LinkedCountColumn(
         viewname="plugins:netbox_gcore_plugin:zonezones_list",
         url_params={"account": "pk"},
         verbose_name="Zones count",
-    )
+    )"""
     tags = columns.TagColumn()
     actions = columns.ActionsColumn(actions=("delete",))
 
@@ -49,10 +49,9 @@ class ZoneAccountTable(NetBoxTable):
             "pk",
             "id",
             "token",
-            "zonezones_count",
             "tags",
         )
-        default_columns = ("zone_name", "zonezones_count")
+        default_columns = ("token",)
 
 
 class DnsRecordTable(NetBoxTable):

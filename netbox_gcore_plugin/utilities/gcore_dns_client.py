@@ -1,33 +1,29 @@
 """Gcore DNS Client"""
 
 import requests
-from ..models import DnsRecord, ZoneZones, ZoneAccount
+from ..models import DnsRecord, ZoneZones
 
 
 class GcoreDnsClient:
     """Gcore DNS Client"""
 
-    zone_account = None
-    zone_zones = None
     base_url = None
+    token = None
 
-    def __init__(self, zone_account, zone_zones, base_url):
-        self.zone_account = zone_account
-        self.zone_zones = zone_zones
+    def __init__(self, base_url, token):
         self.base_url = base_url
+        self.token = token
 
-    def get_dns_zones(self):
+    def get_dns_zones(self, zone_account):
         """Get DNS Zones from Gcore"""
 
         url = f"{self.base_url}/dns/v2/zones"
         headers = {
-            "Authorization": f"APIKey {self.zone_account.token}",
+            "Authorization": f"APIKey {self.token}",
             "Content-Type": "application/json",
         }
 
-        response = requests.get(
-            url, headers=headers, timeout=5
-        )
+        response = requests.get(url, headers=headers, timeout=5)
 
         response.raise_for_status()
 
@@ -40,26 +36,23 @@ class GcoreDnsClient:
         for zones in content["zones"]:
             result["zones"].append(
                 ZoneZones(
-                    account=self.zone_account,
+                    account=zone_account,
                     zone_name=zones["name"],
                 )
             )
 
         return result
 
-
-    def get_dns_records(self):
+    def get_dns_records(self, zone):
         """Get DNS Records from Gcore"""
 
-        url = f"{self.base_url}/dns/v2/zones/{self.zone_zones.zone_name}"
+        url = f"{self.base_url}/dns/v2/zones/{zone.zone_name}"
         headers = {
-            "Authorization": f"APIKey {self.zone_account.token}",
+            "Authorization": f"APIKey {self.token}",
             "Content-Type": "application/json",
         }
 
-        response = requests.get(
-            url, headers=headers, timeout=5
-        )
+        response = requests.get(url, headers=headers, timeout=5)
 
         response.raise_for_status()
 
@@ -73,7 +66,7 @@ class GcoreDnsClient:
             if record["type"] in (DnsRecord.A, DnsRecord.CNAME):
                 result["records"].append(
                     DnsRecord(
-                        zone=self.zone_zones,
+                        zone=zone,
                         record_id=0,
                         name=record["name"],
                         type=record["type"],
@@ -99,21 +92,19 @@ class GcoreDnsClient:
             headers=headers,
             timeout=5,
             json={
-                "resource_records": [{
-                    "content": [dns_record.content]
-                }],
-                #"ttl": dns_record.ttl,
-                "ttl": 0
+                "resource_records": [{"content": [dns_record.content]}],
+                # "ttl": dns_record.ttl,
+                "ttl": 0,
             },
         )
 
-        #response.raise_for_status()
+        # response.raise_for_status()
 
-        #content = response.json()
+        # content = response.json()
 
-        #dns_record.record_id = content["id"]
+        # dns_record.record_id = content["id"]
 
-        #return dns_zone
+        # return dns_zone
 
     def create_dns_record(self, dns_record):
         """Add DNS Record to Gcore"""
@@ -129,11 +120,9 @@ class GcoreDnsClient:
             headers=headers,
             timeout=5,
             json={
-                "resource_records": [{
-                    "content": [dns_record.content]
-                }],
-                #"ttl": dns_record.ttl,
-                "ttl": 0
+                "resource_records": [{"content": [dns_record.content]}],
+                # "ttl": dns_record.ttl,
+                "ttl": 0,
             },
         )
 
