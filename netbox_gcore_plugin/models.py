@@ -11,12 +11,10 @@ from django.core.validators import (
 from taggit.managers import TaggableManager
 from netbox.models import NetBoxModel
 
-
 class ZoneAccount(NetBoxModel):
-    """GCore DNS zone account definition class"""
+    """GCore account definition class"""
 
-    zone_name = models.CharField(
-        unique=True,
+    name = models.CharField(
         max_length=255,
         null=False,
         blank=False,
@@ -25,6 +23,7 @@ class ZoneAccount(NetBoxModel):
             MaxLengthValidator(limit_value=255),
         ],
     )
+
     token = models.CharField(
         max_length=255,
         null=False,
@@ -40,7 +39,42 @@ class ZoneAccount(NetBoxModel):
     )
 
     class Meta:
-        """GCore DNS zone account Model Meta Class"""
+        """GCore zone account Model Meta Class"""
+
+        ordering = ("name",)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def get_absolute_url(self):
+        """override"""
+        return reverse("plugins:netbox_gcore_plugin:zoneaccount", args=[self.pk])
+
+
+class ZoneZones(NetBoxModel):
+    """GCore DNS zone definition class"""
+
+    account = models.ForeignKey(
+        ZoneAccount, on_delete=models.CASCADE, related_name="zones"
+    )
+
+    zone_name = models.CharField(
+        unique=True,
+        max_length=255,
+        null=False,
+        blank=False,
+        validators=[
+            MinLengthValidator(limit_value=1),
+            MaxLengthValidator(limit_value=255),
+        ],
+    )
+
+    tags = TaggableManager(
+        through="extras.TaggedItem", related_name="netbox_gcore_plugin_zonezones_set"
+    )
+
+    class Meta:
+        """GCore DNS zone Model Meta Class"""
 
         ordering = ("zone_name",)
 
@@ -49,7 +83,7 @@ class ZoneAccount(NetBoxModel):
 
     def get_absolute_url(self):
         """override"""
-        return reverse("plugins:netbox_gcore_plugin:zoneaccount", args=[self.pk])
+        return reverse("plugins:netbox_gcore_plugin:zonezones", args=[self.pk])
 
 
 class DnsRecord(NetBoxModel):
@@ -64,7 +98,7 @@ class DnsRecord(NetBoxModel):
     )
 
     zone = models.ForeignKey(
-        ZoneAccount, on_delete=models.CASCADE, related_name="records"
+        ZoneZones, on_delete=models.CASCADE, related_name="records"
     )
     record_id = name = models.CharField(
         max_length=32,

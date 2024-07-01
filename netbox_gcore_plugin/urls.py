@@ -38,6 +38,38 @@ urlpatterns = (
         name="zoneaccount_changelog",
         kwargs={"model": models.ZoneAccount},
     ),
+    # ZoneDNS
+    path(
+        "dns/zones/",
+        views.ZoneZonesListView.as_view(),
+        name="zonezones_list",
+    ),
+    path(
+        "dns/zones/add/",
+        views.ZoneZonesAddView.as_view(),
+        name="zonezones_add",
+    ),
+    path(
+        "dns/zones/delete/",
+        views.ZoneZonesBulkDeleteView.as_view(),
+        name="zonezones_bulk_delete",
+    ),
+    path(
+        "dns/zones/<int:pk>/",
+        views.ZoneZonesView.as_view(),
+        name="zonezones",
+    ),
+    path(
+        "dns/zones/<int:pk>/delete/",
+        views.ZoneZonesDeleteView.as_view(),
+        name="zonezones_delete",
+    ),
+    path(
+        "dns/zones/<int:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="zonezones_changelog",
+        kwargs={"model": models.ZoneZones},
+    ),
     # DnsRecord
     path(
         "dns/records/",

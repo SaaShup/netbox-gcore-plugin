@@ -38,10 +38,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "zone_name",
+                    "name",
                     models.CharField(
                         max_length=255,
-                        unique=True,
                         validators=[
                             django.core.validators.MinLengthValidator(limit_value=1),
                             django.core.validators.MaxLengthValidator(limit_value=255),
@@ -62,6 +61,56 @@ class Migration(migrations.Migration):
                     "tags",
                     taggit.managers.TaggableManager(
                         through="extras.TaggedItem", to="extras.Tag"
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("token",),
+            },
+        ),
+
+        migrations.CreateModel(
+            name="ZoneZones",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True, null=True)),
+                ("last_updated", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "custom_field_data",
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
+                (
+                    "zone_name",
+                    models.CharField(
+                        max_length=255,
+                        unique=True,
+                        validators=[
+                            django.core.validators.MinLengthValidator(limit_value=1),
+                            django.core.validators.MaxLengthValidator(limit_value=255),
+                        ],
+                    ),
+                ),
+                (
+                    "tags",
+                    taggit.managers.TaggableManager(
+                        through="extras.TaggedItem", to="extras.Tag"
+                    ),
+                ),
+                (
+                    "account",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="zones",
+                        to="netbox_gcore_plugin.zoneaccount",
                     ),
                 ),
             ],
@@ -141,7 +190,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="records",
-                        to="netbox_gcore_plugin.zoneaccount",
+                        to="netbox_gcore_plugin.zonezones",
                     ),
                 ),
             ],

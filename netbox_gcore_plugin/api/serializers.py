@@ -2,11 +2,29 @@
 
 from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer, WritableNestedSerializer
-from ..models import ZoneAccount, DnsRecord
+from ..models import ZoneAccount, DnsRecord, ZoneZones
 
+
+class NestedZoneZonesSerializer(WritableNestedSerializer):
+    """Nested Zones Serializer class"""
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:netbox_gcore_plugin-api:zonezones-detail"
+    )
+
+    class Meta:
+        """Nested Zone Serializer Meta class"""
+
+        model = ZoneZones
+        fields = (
+            "id",
+            "url",
+            "display",
+            "zone_name",
+        )
 
 class NestedZoneAccountSerializer(WritableNestedSerializer):
-    """Nested ZoneAccount Serializer class"""
+    """Nested Account Serializer class"""
 
     url = serializers.HyperlinkedIdentityField(
         view_name="plugins-api:netbox_gcore_plugin-api:zoneaccount-detail"
@@ -20,7 +38,6 @@ class NestedZoneAccountSerializer(WritableNestedSerializer):
             "id",
             "url",
             "display",
-            "zone_name",
             "token",
         )
 
@@ -93,7 +110,6 @@ class ZoneAccountSerializer(NetBoxModelSerializer):
             "id",
             "url",
             "display",
-            "zone_name",
             "token",
             "custom_fields",
             "created",
@@ -101,3 +117,26 @@ class ZoneAccountSerializer(NetBoxModelSerializer):
             "tags",
         )
         brief_fields = NestedZoneAccountSerializer.Meta.fields
+
+class ZoneZonesSerializer(NetBoxModelSerializer):
+    """ZoneZones Serializer class"""
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:netbox_gcore_plugin-api:zonezones-detail"
+    )
+
+    class Meta:
+        """ZoneZones Serializer Meta class"""
+
+        model = ZoneZones
+        fields = (
+            "id",
+            "url",
+            "display",
+            "zone_name",
+            "custom_fields",
+            "created",
+            "last_updated",
+            "tags",
+        )
+        brief_fields = NestedZoneZonesSerializer.Meta.fields

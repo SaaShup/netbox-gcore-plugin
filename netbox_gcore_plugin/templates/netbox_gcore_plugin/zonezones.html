@@ -6,16 +6,16 @@
 <div class="row mb-3">
   <div class="col col-md-6">
     <div class="card">
-      <h5 class="card-header">ACCOUNT</h5>
+      <h5 class="card-header">DNS ZONES</h5>
       <div class="card-body">
         <table class="table table-hover attr-table">
+            <tr>
+                <th scope="row">Account</th>
+                <td>{{ object.account|linkify }}</td>
+            </tr>
           <tr>
             <th scope="row">Name</th>
-            <td>{{ object.name }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Token</th>
-            <td>{{ object.token }}</td>
+            <td>{{ object.zone_name }}</td>
           </tr>
         </table>
       </div>

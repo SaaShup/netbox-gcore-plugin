@@ -2,11 +2,10 @@
 
 import django_tables2 as tables
 from netbox.tables import NetBoxTable, columns
-from .models import ZoneAccount, DnsRecord
+from .models import ZoneAccount, DnsRecord, ZoneZones
 
-
-class ZoneAccountTable(NetBoxTable):
-    """ZoneAccount Table definition class"""
+class ZoneZonesTable(NetBoxTable):
+    """ZoneZones Table definition class"""
 
     zone_name = tables.Column(linkify=True)
     dnsrecord_count = columns.LinkedCountColumn(
@@ -18,18 +17,42 @@ class ZoneAccountTable(NetBoxTable):
     actions = columns.ActionsColumn(actions=("delete",))
 
     class Meta(NetBoxTable.Meta):
+        """ZoneZones Table definition Meta class"""
+
+        model = ZoneZones
+        fields = (
+            "pk",
+            "id",
+            "zone_name",
+            "dnsrecord_count",
+            "tags",
+        )
+        default_columns = ("zone_name", "dnsrecord_count")
+
+class ZoneAccountTable(NetBoxTable):
+    """ZoneAccount Table definition class"""
+
+    name = tables.Column(linkify=True)
+    """zonezones_count = columns.LinkedCountColumn(
+        viewname="plugins:netbox_gcore_plugin:zonezones_list",
+        url_params={"account": "pk"},
+        verbose_name="Zones count",
+    )"""
+    tags = columns.TagColumn()
+    actions = columns.ActionsColumn(actions=("delete",))
+
+    class Meta(NetBoxTable.Meta):
         """ZoneAccount Table definition Meta class"""
 
         model = ZoneAccount
         fields = (
             "pk",
             "id",
-            "zone_name",
+            "name",
             "token",
-            "dnsrecord_count",
             "tags",
         )
-        default_columns = ("zone_name", "dnsrecord_count")
+        default_columns = ("name",)
 
 
 class DnsRecordTable(NetBoxTable):
