@@ -38,6 +38,16 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "name",
+                    models.CharField(
+                        max_length=255,
+                        validators=[
+                            django.core.validators.MinLengthValidator(limit_value=1),
+                            django.core.validators.MaxLengthValidator(limit_value=255),
+                        ],
+                    ),
+                ),
+                (
                     "token",
                     models.CharField(
                         max_length=255,

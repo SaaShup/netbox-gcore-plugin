@@ -14,6 +14,16 @@ from netbox.models import NetBoxModel
 class ZoneAccount(NetBoxModel):
     """GCore account definition class"""
 
+    name = models.CharField(
+        max_length=255,
+        null=False,
+        blank=False,
+        validators=[
+            MinLengthValidator(limit_value=1),
+            MaxLengthValidator(limit_value=255),
+        ],
+    )
+
     token = models.CharField(
         max_length=255,
         null=False,
@@ -31,10 +41,10 @@ class ZoneAccount(NetBoxModel):
     class Meta:
         """GCore zone account Model Meta Class"""
 
-        ordering = ("token",)
+        ordering = ("name",)
 
     def __str__(self):
-        return f"{self.token}"
+        return f"{self.name}"
 
     def get_absolute_url(self):
         """override"""

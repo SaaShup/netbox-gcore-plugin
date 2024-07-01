@@ -35,6 +35,7 @@ class ZoneAccountForm(NetBoxModelForm):
 
         model = ZoneAccount
         fields = (
+            "name",
             "token",
             "tags",
         )

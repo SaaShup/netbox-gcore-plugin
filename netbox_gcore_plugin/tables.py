@@ -32,7 +32,7 @@ class ZoneZonesTable(NetBoxTable):
 class ZoneAccountTable(NetBoxTable):
     """ZoneAccount Table definition class"""
 
-    token = tables.Column(linkify=True)
+    name = tables.Column(linkify=True)
     """zonezones_count = columns.LinkedCountColumn(
         viewname="plugins:netbox_gcore_plugin:zonezones_list",
         url_params={"account": "pk"},
@@ -48,10 +48,11 @@ class ZoneAccountTable(NetBoxTable):
         fields = (
             "pk",
             "id",
+            "name",
             "token",
             "tags",
         )
-        default_columns = ("token",)
+        default_columns = ("name",)
 
 
 class DnsRecordTable(NetBoxTable):
